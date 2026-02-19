@@ -1,34 +1,34 @@
-import { useMemo } from 'react';
+import { useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { FaDownload, FaEye } from 'react-icons/fa';
 import { socialLinks } from '../data/portfolioData';
 
-function Particles() {
-    const particles = useMemo(() =>
-        Array.from({ length: 40 }, (_, i) => ({
-            id: i,
-            left: `${Math.random() * 100}%`,
-            size: Math.random() * 3 + 1,
-            duration: Math.random() * 8 + 6,
-            delay: Math.random() * 8,
-            opacity: Math.random() * 0.5 + 0.2,
-        })), []);
+const LOOP_SKIP_SECONDS = 4;
+
+function VideoBackground() {
+    const videoRef = useRef(null);
+    const hasPlayedOnce = useRef(false);
+
+    const handleEnded = useCallback(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        hasPlayedOnce.current = true;
+        video.currentTime = LOOP_SKIP_SECONDS;
+        video.play();
+    }, []);
 
     return (
-        <div className="hero-particles">
-            {particles.map((p) => (
-                <div
-                    key={p.id}
-                    className="particle"
-                    style={{
-                        left: p.left,
-                        width: `${p.size}px`,
-                        height: `${p.size}px`,
-                        animationDuration: `${p.duration}s`,
-                        animationDelay: `${p.delay}s`,
-                    }}
-                />
-            ))}
+        <div className="video-bg">
+            <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                onEnded={handleEnded}
+            >
+                <source src="/videos/huly_laser_remix.mp4" type="video/mp4" />
+            </video>
         </div>
     );
 }
@@ -48,16 +48,8 @@ const itemVariants = {
 export default function Hero() {
     return (
         <section id="home" className="hero">
-            {/* Background effects */}
-            <div className="hero-bg">
-                <div className="hero-bg-orb" />
-                <div className="hero-bg-orb" />
-                <div className="hero-bg-orb" />
-                <div className="hero-bg-orb" />
-                <div className="hero-bg-orb" />
-                <div className="hero-bg-orb" />
-            </div>
-            <Particles />
+            {/* Video Background */}
+            <VideoBackground />
 
             <motion.div
                 className="hero-content"
@@ -80,10 +72,10 @@ export default function Hero() {
                 </motion.p>
 
                 <motion.div className="hero-buttons" variants={itemVariants}>
-                    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                    <a href="/docs/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                         <FaEye /> View Resume
                     </a>
-                    <a href="/resume.pdf" download className="btn btn-secondary">
+                    <a href="/docs/resume.pdf" download className="btn btn-secondary">
                         <FaDownload /> Download Resume
                     </a>
                 </motion.div>

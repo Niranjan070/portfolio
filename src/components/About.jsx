@@ -99,7 +99,7 @@ export default function About() {
                             whileHover={{ scale: 1.03 }}
                             transition={{ type: 'spring', stiffness: 300 }}
                         >
-                            <img src="/profile.jpeg" alt="Niranjan" />
+                            <img src="\images\profile 2.jpeg" alt="Niranjan" />
                         </motion.div>
 
                         <motion.div

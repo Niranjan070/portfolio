@@ -333,233 +333,27 @@ button {
   padding-top: 80px;
 }
 
-.hero-bg {
+/* Video Background */
+.video-bg {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: var(--bg-primary);
 }
 
-.hero-bg-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(120px);
-  will-change: transform;
+.video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Teal / Cyan — top-right */
-.hero-bg-orb:nth-child(1) {
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(0, 212, 200, 0.55) 0%, transparent 70%);
-  top: -15%;
-  right: -10%;
-  animation: orbDrift1 12s ease-in-out infinite;
-}
-
-/* Magenta / Pink — bottom-left */
-.hero-bg-orb:nth-child(2) {
-  width: 650px;
-  height: 650px;
-  background: radial-gradient(circle, rgba(200, 50, 180, 0.5) 0%, transparent 70%);
-  bottom: -10%;
-  left: -8%;
-  animation: orbDrift2 14s ease-in-out infinite;
-}
-
-/* Orange / Amber — center-left */
-.hero-bg-orb:nth-child(3) {
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, rgba(245, 140, 30, 0.45) 0%, transparent 70%);
-  top: 30%;
-  left: 5%;
-  animation: orbDrift3 10s ease-in-out infinite;
-}
-
-/* Additional orbs rendered from Hero component — extra CSS targets */
-.hero-bg-orb:nth-child(4) {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
-  top: 55%;
-  right: 15%;
-  animation: orbDrift4 16s ease-in-out infinite;
-}
-
-.hero-bg-orb:nth-child(5) {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(250, 200, 60, 0.35) 0%, transparent 70%);
-  top: -5%;
-  left: 35%;
-  animation: orbDrift5 11s ease-in-out infinite;
-}
-
-.hero-bg-orb:nth-child(6) {
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(120, 50, 220, 0.45) 0%, transparent 70%);
-  bottom: 5%;
-  right: -5%;
-  animation: orbDrift6 13s ease-in-out infinite;
-}
-
-@keyframes orbDrift1 {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  25% {
-    transform: translate(-40px, 50px) scale(1.08);
-  }
-
-  50% {
-    transform: translate(30px, 20px) scale(0.95);
-  }
-
-  75% {
-    transform: translate(-20px, -30px) scale(1.04);
-  }
-}
-
-@keyframes orbDrift2 {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  30% {
-    transform: translate(50px, -40px) scale(1.06);
-  }
-
-  60% {
-    transform: translate(-30px, 30px) scale(0.94);
-  }
-
-  80% {
-    transform: translate(20px, -10px) scale(1.02);
-  }
-}
-
-@keyframes orbDrift3 {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  20% {
-    transform: translate(35px, 45px) scale(1.1);
-  }
-
-  50% {
-    transform: translate(-25px, -20px) scale(0.92);
-  }
-
-  75% {
-    transform: translate(15px, 30px) scale(1.05);
-  }
-}
-
-@keyframes orbDrift4 {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  35% {
-    transform: translate(-45px, -35px) scale(1.07);
-  }
-
-  65% {
-    transform: translate(30px, 25px) scale(0.96);
-  }
-
-  85% {
-    transform: translate(-15px, 40px) scale(1.03);
-  }
-}
-
-@keyframes orbDrift5 {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  30% {
-    transform: translate(25px, 40px) scale(1.05);
-  }
-
-  55% {
-    transform: translate(-35px, -15px) scale(0.97);
-  }
-
-  80% {
-    transform: translate(40px, -25px) scale(1.08);
-  }
-}
-
-@keyframes orbDrift6 {
-
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-
-  25% {
-    transform: translate(-30px, 35px) scale(1.04);
-  }
-
-  50% {
-    transform: translate(45px, -20px) scale(0.93);
-  }
-
-  75% {
-    transform: translate(-20px, -40px) scale(1.06);
-  }
-}
-
-.hero-particles {
+.video-bg::after {
+  content: '';
   position: absolute;
   inset: 0;
-  overflow: hidden;
-}
-
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: var(--accent-cyan);
-  border-radius: 50%;
-  animation: particleFloat linear infinite;
-  opacity: 0;
-}
-
-@keyframes particleFloat {
-  0% {
-    opacity: 0;
-    transform: translateY(100vh) scale(0);
-  }
-
-  10% {
-    opacity: 0.6;
-  }
-
-  90% {
-    opacity: 0.6;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateY(-10vh) scale(1);
-  }
+  background: rgba(6, 8, 13, 0.3);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero-content {
