@@ -3,69 +3,65 @@ import { gsap } from 'gsap';
 import { socialLinks } from '../data/portfolioData';
 
 export default function Hero() {
+    const heroRef = useRef(null);
     const titleRef = useRef(null);
     const subtitleRef = useRef(null);
     const scrollRef = useRef(null);
     const sideMenuRef = useRef(null);
     const [scrollProgress, setScrollProgress] = useState(0);
-    const [animated, setAnimated] = useState(false);
 
-    // GSAP entrance animations
+    // GSAP entrance — clean and minimal
     useEffect(() => {
-        // Small delay to ensure DOM is ready
-        const timer = setTimeout(() => {
-            const tl = gsap.timeline({
-                onStart: () => setAnimated(true),
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ delay: 0.5 });
+
+            // Title chars fly up
+            tl.to('.title-char', {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                stagger: 0.04,
+                ease: 'power4.out',
             });
 
+            // Subtitle fades in
+            tl.to('.subtitle-line', {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out',
+            }, '-=0.6');
+
             // Side menu slides in
-            if (sideMenuRef.current) {
-                tl.fromTo(sideMenuRef.current,
-                    { x: -100, opacity: 0 },
-                    { x: 0, opacity: 1, duration: 1, ease: 'power3.out' }
-                );
-            }
-
-            // Title characters fly up
-            if (titleRef.current) {
-                const chars = titleRef.current.querySelectorAll('.title-char');
-                if (chars.length > 0) {
-                    tl.fromTo(chars,
-                        { y: 200, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 1.5, stagger: 0.05, ease: 'power4.out' },
-                        '-=0.5'
-                    );
-                }
-            }
-
-            // Subtitle lines
-            if (subtitleRef.current) {
-                const lines = subtitleRef.current.querySelectorAll('.subtitle-line');
-                if (lines.length > 0) {
-                    tl.fromTo(lines,
-                        { y: 50, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: 'power3.out' },
-                        '-=0.8'
-                    );
-                }
-            }
+            tl.to('.hero-side-menu', {
+                x: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+            }, '-=0.6');
 
             // Scroll indicator
-            if (scrollRef.current) {
-                tl.fromTo(scrollRef.current,
-                    { y: 50, opacity: 0 },
-                    { y: 0, opacity: 1, duration: 1, ease: 'power2.out' },
-                    '-=0.5'
-                );
-            }
+            tl.to('.hero-scroll-indicator', {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power2.out',
+            }, '-=0.4');
 
-            return () => tl.kill();
-        }, 300);
+            // Socials
+            tl.to('.hero-socials', {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power2.out',
+            }, '-=0.6');
+        }, heroRef);
 
-        return () => clearTimeout(timer);
+        return () => ctx.revert();
     }, []);
 
-    // Scroll progress tracking
+    // Scroll progress
     useEffect(() => {
         const handleScroll = () => {
             const scrollY = window.scrollY;
@@ -76,17 +72,12 @@ export default function Hero() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const splitText = (text) =>
-        text.split('').map((char, i) => (
-            <span key={i} className="title-char" style={{ opacity: animated ? 1 : 0 }}>
-                {char === ' ' ? '\u00A0' : char}
-            </span>
-        ));
+    const title = 'NIRANJAN';
 
     return (
-        <section id="home" className="hero">
-            {/* Side menu */}
-            <div ref={sideMenuRef} className="hero-side-menu" style={{ opacity: 0 }}>
+        <section id="home" className="hero" ref={heroRef}>
+            {/* Side menu — starts hidden */}
+            <div className="hero-side-menu">
                 <div className="menu-icon">
                     <span></span>
                     <span></span>
@@ -98,21 +89,25 @@ export default function Hero() {
             {/* Main content */}
             <div className="hero-content">
                 <h1 ref={titleRef} className="hero-title">
-                    {splitText('NIRANJAN')}
+                    {title.split('').map((char, i) => (
+                        <span key={i} className="title-char">
+                            {char}
+                        </span>
+                    ))}
                 </h1>
 
                 <div ref={subtitleRef} className="hero-subtitle-wrap">
-                    <p className="hero-subtitle subtitle-line" style={{ opacity: animated ? 1 : 0 }}>
+                    <p className="hero-subtitle subtitle-line">
                         Data Scientist in the Making
                     </p>
-                    <p className="hero-subtitle subtitle-line" style={{ opacity: animated ? 1 : 0 }}>
+                    <p className="hero-subtitle subtitle-line">
                         Creating intelligent solutions &amp; insights
                     </p>
                 </div>
             </div>
 
-            {/* Scroll progress indicator */}
-            <div ref={scrollRef} className="hero-scroll-indicator" style={{ opacity: 0 }}>
+            {/* Scroll indicator */}
+            <div ref={scrollRef} className="hero-scroll-indicator">
                 <span className="scroll-label">SCROLL</span>
                 <div className="scroll-track">
                     <div
@@ -125,16 +120,11 @@ export default function Hero() {
                 </span>
             </div>
 
-            {/* Social links */}
+            {/* Socials */}
             <div className="hero-socials">
                 <span className="social-label">Follow Me</span>
                 {socialLinks.slice(0, 3).map((s, i) => (
-                    <a
-                        key={i}
-                        href={s.href}
-                        className="social-icon"
-                        aria-label={s.label}
-                    >
+                    <a key={i} href={s.href} className="social-icon" aria-label={s.label}>
                         <s.icon />
                     </a>
                 ))}

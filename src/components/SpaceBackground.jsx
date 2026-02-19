@@ -6,7 +6,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 
 export default function SpaceBackground() {
     const canvasRef = useRef(null);
-    const smoothCamera = useRef({ x: 0, y: 30, z: 300 });
+    const smoothCameraPos = useRef({ x: 0, y: 30, z: 100 });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -21,9 +21,6 @@ export default function SpaceBackground() {
             nebula: null,
             mountains: [],
             locations: [],
-            targetCameraX: 0,
-            targetCameraY: 30,
-            targetCameraZ: 300,
             animationId: null,
         };
 
@@ -38,7 +35,8 @@ export default function SpaceBackground() {
             0.1,
             2000
         );
-        refs.camera.position.set(0, 20, 100);
+        refs.camera.position.z = 100;
+        refs.camera.position.y = 20;
 
         // ─── Renderer ───
         refs.renderer = new THREE.WebGLRenderer({
@@ -68,6 +66,7 @@ export default function SpaceBackground() {
         // ════════════════════════════════════════
         const starCount = 5000;
         for (let i = 0; i < 3; i++) {
+            const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(starCount * 3);
             const colors = new Float32Array(starCount * 3);
             const sizes = new Float32Array(starCount);
@@ -82,10 +81,14 @@ export default function SpaceBackground() {
                 positions[j * 3 + 2] = radius * Math.cos(phi);
 
                 const color = new THREE.Color();
-                const pick = Math.random();
-                if (pick < 0.7) color.setHSL(0, 0, 0.8 + Math.random() * 0.2);
-                else if (pick < 0.9) color.setHSL(0.08, 0.5, 0.8);
-                else color.setHSL(0.6, 0.5, 0.8);
+                const colorChoice = Math.random();
+                if (colorChoice < 0.7) {
+                    color.setHSL(0, 0, 0.8 + Math.random() * 0.2);
+                } else if (colorChoice < 0.9) {
+                    color.setHSL(0.08, 0.5, 0.8);
+                } else {
+                    color.setHSL(0.6, 0.5, 0.8);
+                }
 
                 colors[j * 3] = color.r;
                 colors[j * 3 + 1] = color.g;
@@ -93,36 +96,43 @@ export default function SpaceBackground() {
                 sizes[j] = Math.random() * 2 + 0.5;
             }
 
-            const geo = new THREE.BufferGeometry();
-            geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-            const mat = new THREE.ShaderMaterial({
-                uniforms: { time: { value: 0 }, depth: { value: i } },
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    depth: { value: i },
+                },
                 vertexShader: `
                     attribute float size;
                     attribute vec3 color;
                     varying vec3 vColor;
                     uniform float time;
                     uniform float depth;
+
                     void main() {
                         vColor = color;
                         vec3 pos = position;
+
                         float angle = time * 0.05 * (1.0 - depth * 0.3);
                         mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
                         pos.xy = rot * pos.xy;
-                        vec4 mv = modelViewMatrix * vec4(pos, 1.0);
-                        gl_PointSize = size * (300.0 / -mv.z);
-                        gl_Position = projectionMatrix * mv;
+
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        gl_PointSize = size * (300.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
                     }
                 `,
                 fragmentShader: `
                     varying vec3 vColor;
+
                     void main() {
-                        float d = length(gl_PointCoord - vec2(0.5));
-                        if (d > 0.5) discard;
-                        float opacity = 1.0 - smoothstep(0.0, 0.5, d);
+                        float dist = length(gl_PointCoord - vec2(0.5));
+                        if (dist > 0.5) discard;
+
+                        float opacity = 1.0 - smoothstep(0.0, 0.5, dist);
                         gl_FragColor = vec4(vColor, opacity);
                     }
                 `,
@@ -131,7 +141,7 @@ export default function SpaceBackground() {
                 depthWrite: false,
             });
 
-            const stars = new THREE.Points(geo, mat);
+            const stars = new THREE.Points(geometry, material);
             refs.scene.add(stars);
             refs.stars.push(stars);
         }
@@ -139,7 +149,8 @@ export default function SpaceBackground() {
         // ════════════════════════════
         // ─── CREATE NEBULA ───
         // ════════════════════════════
-        const nebulaMat = new THREE.ShaderMaterial({
+        const nebulaGeometry = new THREE.PlaneGeometry(8000, 4000, 100, 100);
+        const nebulaMaterial = new THREE.ShaderMaterial({
             uniforms: {
                 time: { value: 0 },
                 color1: { value: new THREE.Color(0x0033ff) },
@@ -150,12 +161,15 @@ export default function SpaceBackground() {
                 varying vec2 vUv;
                 varying float vElevation;
                 uniform float time;
+
                 void main() {
                     vUv = uv;
                     vec3 pos = position;
-                    float elev = sin(pos.x * 0.01 + time) * cos(pos.y * 0.01 + time) * 20.0;
-                    pos.z += elev;
-                    vElevation = elev;
+
+                    float elevation = sin(pos.x * 0.01 + time) * cos(pos.y * 0.01 + time) * 20.0;
+                    pos.z += elevation;
+                    vElevation = elevation;
+
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
                 }
             `,
@@ -166,12 +180,15 @@ export default function SpaceBackground() {
                 uniform float time;
                 varying vec2 vUv;
                 varying float vElevation;
+
                 void main() {
-                    float mix_ = sin(vUv.x * 10.0 + time) * cos(vUv.y * 10.0 + time);
-                    vec3 col = mix(color1, color2, mix_ * 0.5 + 0.5);
-                    float a = opacity * (1.0 - length(vUv - 0.5) * 2.0);
-                    a *= 1.0 + vElevation * 0.01;
-                    gl_FragColor = vec4(col, a);
+                    float mixFactor = sin(vUv.x * 10.0 + time) * cos(vUv.y * 10.0 + time);
+                    vec3 color = mix(color1, color2, mixFactor * 0.5 + 0.5);
+
+                    float alpha = opacity * (1.0 - length(vUv - 0.5) * 2.0);
+                    alpha *= 1.0 + vElevation * 0.01;
+
+                    gl_FragColor = vec4(color, alpha);
                 }
             `,
             transparent: true,
@@ -179,11 +196,10 @@ export default function SpaceBackground() {
             side: THREE.DoubleSide,
             depthWrite: false,
         });
-        const nebula = new THREE.Mesh(
-            new THREE.PlaneGeometry(8000, 4000, 100, 100),
-            nebulaMat
-        );
+
+        const nebula = new THREE.Mesh(nebulaGeometry, nebulaMaterial);
         nebula.position.z = -1050;
+        nebula.rotation.x = 0;
         refs.scene.add(nebula);
         refs.nebula = nebula;
 
@@ -197,9 +213,10 @@ export default function SpaceBackground() {
             { distance: -200, height: 120, color: 0x0a4668, opacity: 0.4 },
         ];
 
-        layers.forEach((layer) => {
-            const pts = [];
+        layers.forEach((layer, index) => {
+            const points = [];
             const segments = 50;
+
             for (let i = 0; i <= segments; i++) {
                 const x = (i / segments - 0.5) * 1000;
                 const y =
@@ -207,24 +224,25 @@ export default function SpaceBackground() {
                     Math.sin(i * 0.05) * layer.height * 0.5 +
                     Math.random() * layer.height * 0.2 -
                     100;
-                pts.push(new THREE.Vector2(x, y));
+                points.push(new THREE.Vector2(x, y));
             }
-            pts.push(new THREE.Vector2(5000, -300));
-            pts.push(new THREE.Vector2(-5000, -300));
 
-            const shape = new THREE.Shape(pts);
-            const mountain = new THREE.Mesh(
-                new THREE.ShapeGeometry(shape),
-                new THREE.MeshBasicMaterial({
-                    color: layer.color,
-                    transparent: true,
-                    opacity: layer.opacity,
-                    side: THREE.DoubleSide,
-                })
-            );
+            points.push(new THREE.Vector2(5000, -300));
+            points.push(new THREE.Vector2(-5000, -300));
+
+            const shape = new THREE.Shape(points);
+            const geometry = new THREE.ShapeGeometry(shape);
+            const material = new THREE.MeshBasicMaterial({
+                color: layer.color,
+                transparent: true,
+                opacity: layer.opacity,
+                side: THREE.DoubleSide,
+            });
+
+            const mountain = new THREE.Mesh(geometry, material);
             mountain.position.z = layer.distance;
             mountain.position.y = layer.distance;
-            mountain.userData = { baseZ: layer.distance };
+            mountain.userData = { baseZ: layer.distance, index };
             refs.scene.add(mountain);
             refs.mountains.push(mountain);
         });
@@ -235,30 +253,43 @@ export default function SpaceBackground() {
         // ════════════════════════════════
         // ─── CREATE ATMOSPHERE ───
         // ════════════════════════════════
-        const atmoMat = new THREE.ShaderMaterial({
-            uniforms: { time: { value: 0 } },
+        const atmoGeometry = new THREE.SphereGeometry(600, 32, 32);
+        const atmoMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+            },
             vertexShader: `
                 varying vec3 vNormal;
+                varying vec3 vPosition;
+
                 void main() {
                     vNormal = normalize(normalMatrix * normal);
+                    vPosition = position;
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                 }
             `,
             fragmentShader: `
                 varying vec3 vNormal;
+                varying vec3 vPosition;
                 uniform float time;
+
                 void main() {
                     float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-                    vec3 atmo = vec3(0.3, 0.6, 1.0) * intensity;
-                    atmo *= sin(time * 2.0) * 0.1 + 0.9;
-                    gl_FragColor = vec4(atmo, intensity * 0.25);
+                    vec3 atmosphere = vec3(0.3, 0.6, 1.0) * intensity;
+
+                    float pulse = sin(time * 2.0) * 0.1 + 0.9;
+                    atmosphere *= pulse;
+
+                    gl_FragColor = vec4(atmosphere, intensity * 0.25);
                 }
             `,
             side: THREE.BackSide,
             blending: THREE.AdditiveBlending,
             transparent: true,
         });
-        refs.scene.add(new THREE.Mesh(new THREE.SphereGeometry(600, 32, 32), atmoMat));
+
+        const atmosphere = new THREE.Mesh(atmoGeometry, atmoMaterial);
+        refs.scene.add(atmosphere);
 
         // ════════════════════════════════════
         // ─── ANIMATION LOOP ───
@@ -267,33 +298,38 @@ export default function SpaceBackground() {
             refs.animationId = requestAnimationFrame(animate);
             const time = Date.now() * 0.001;
 
-            // Update star uniforms
-            refs.stars.forEach((s) => {
-                if (s.material.uniforms) s.material.uniforms.time.value = time;
+            // Update stars
+            refs.stars.forEach((starField) => {
+                if (starField.material.uniforms) {
+                    starField.material.uniforms.time.value = time;
+                }
             });
 
             // Update nebula
-            if (refs.nebula?.material.uniforms) {
+            if (refs.nebula && refs.nebula.material.uniforms) {
                 refs.nebula.material.uniforms.time.value = time * 0.5;
             }
 
-            // Atmosphere
-            atmoMat.uniforms.time.value = time;
+            // Update atmosphere
+            atmoMaterial.uniforms.time.value = time;
 
             // Smooth camera movement with easing
-            const sf = 0.05;
-            smoothCamera.current.x += (refs.targetCameraX - smoothCamera.current.x) * sf;
-            smoothCamera.current.y += (refs.targetCameraY - smoothCamera.current.y) * sf;
-            smoothCamera.current.z += (refs.targetCameraZ - smoothCamera.current.z) * sf;
+            if (refs.camera && refs.targetCameraX !== undefined) {
+                const smoothingFactor = 0.05;
 
-            // Add subtle floating motion
-            const floatX = Math.sin(time * 0.1) * 2;
-            const floatY = Math.cos(time * 0.15) * 1;
+                smoothCameraPos.current.x += (refs.targetCameraX - smoothCameraPos.current.x) * smoothingFactor;
+                smoothCameraPos.current.y += (refs.targetCameraY - smoothCameraPos.current.y) * smoothingFactor;
+                smoothCameraPos.current.z += (refs.targetCameraZ - smoothCameraPos.current.z) * smoothingFactor;
 
-            refs.camera.position.x = smoothCamera.current.x + floatX;
-            refs.camera.position.y = smoothCamera.current.y + floatY;
-            refs.camera.position.z = smoothCamera.current.z;
-            refs.camera.lookAt(0, 10, -600);
+                // Subtle floating motion
+                const floatX = Math.sin(time * 0.1) * 2;
+                const floatY = Math.cos(time * 0.15) * 1;
+
+                refs.camera.position.x = smoothCameraPos.current.x + floatX;
+                refs.camera.position.y = smoothCameraPos.current.y + floatY;
+                refs.camera.position.z = smoothCameraPos.current.z;
+                refs.camera.lookAt(0, 10, -600);
+            }
 
             // Parallax mountains with subtle animation
             refs.mountains.forEach((mountain, i) => {
@@ -302,47 +338,49 @@ export default function SpaceBackground() {
                 mountain.position.y = 50 + Math.cos(time * 0.15) * 1 * parallaxFactor;
             });
 
-            refs.composer.render();
+            if (refs.composer) {
+                refs.composer.render();
+            }
         };
         animate();
 
         // ════════════════════════════════════════
-        // ─── SCROLL HANDLER (camera movement) ───
+        // ─── SCROLL HANDLER ───
         // ════════════════════════════════════════
         const handleScroll = () => {
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
-            const docHeight = document.documentElement.scrollHeight;
-            const maxScroll = docHeight - windowHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const maxScroll = documentHeight - windowHeight;
             const progress = Math.min(scrollY / maxScroll, 1);
 
-            const totalSections = 3;
+            const totalSections = 2;
             const totalProgress = progress * totalSections;
             const currentSection = Math.min(Math.floor(totalProgress), totalSections - 1);
             const sectionProgress = totalProgress - currentSection;
 
-            // Camera positions for scroll progress
-            // Section 0: Hero — mountains visible, wide view
-            // Section 1: About/Skills — flying past mountains
-            // Section 2: Projects/Contact — deep in cosmos, nebula visible
+            // Camera positions for scroll journey
             const cameraPositions = [
-                { x: 0, y: 30, z: 300 },
-                { x: 0, y: 40, z: -50 },
-                { x: 0, y: 50, z: -700 },
+                { x: 0, y: 30, z: 300 },    // Hero — mountains visible
+                { x: 0, y: 40, z: -50 },     // Mid — flying past mountains
+                { x: 0, y: 50, z: -700 },    // Deep — cosmos/nebula
             ];
 
             const currentPos = cameraPositions[currentSection] || cameraPositions[0];
             const nextPos = cameraPositions[currentSection + 1] || currentPos;
 
+            // Set target positions (smoothing is in animate loop)
             refs.targetCameraX = currentPos.x + (nextPos.x - currentPos.x) * sectionProgress;
             refs.targetCameraY = currentPos.y + (nextPos.y - currentPos.y) * sectionProgress;
             refs.targetCameraZ = currentPos.z + (nextPos.z - currentPos.z) * sectionProgress;
 
-            // Mountains disappear as you fly past them
+            // Mountains + nebula scroll parallax
             refs.mountains.forEach((mountain, i) => {
                 const speed = 1 + i * 0.9;
                 const targetZ = mountain.userData.baseZ + scrollY * speed * 0.5;
                 refs.nebula.position.z = targetZ + progress * speed * 0.01 - 100;
+
+                mountain.userData.targetZ = targetZ;
 
                 if (progress > 0.7) {
                     mountain.position.z = 600000; // push offscreen
@@ -353,27 +391,41 @@ export default function SpaceBackground() {
             refs.nebula.position.z = refs.mountains[3].position.z;
         };
 
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll(); // Set initial position
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
 
         // ─── Resize ───
         const handleResize = () => {
-            refs.camera.aspect = window.innerWidth / window.innerHeight;
-            refs.camera.updateProjectionMatrix();
-            refs.renderer.setSize(window.innerWidth, window.innerHeight);
-            refs.composer.setSize(window.innerWidth, window.innerHeight);
+            if (refs.camera && refs.renderer && refs.composer) {
+                refs.camera.aspect = window.innerWidth / window.innerHeight;
+                refs.camera.updateProjectionMatrix();
+                refs.renderer.setSize(window.innerWidth, window.innerHeight);
+                refs.composer.setSize(window.innerWidth, window.innerHeight);
+            }
         };
         window.addEventListener('resize', handleResize);
 
         // ─── Cleanup ───
         return () => {
-            cancelAnimationFrame(refs.animationId);
+            if (refs.animationId) cancelAnimationFrame(refs.animationId);
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('scroll', handleScroll);
-            refs.stars.forEach((s) => { s.geometry.dispose(); s.material.dispose(); });
-            refs.mountains.forEach((m) => { m.geometry.dispose(); m.material.dispose(); });
-            if (refs.nebula) { refs.nebula.geometry.dispose(); refs.nebula.material.dispose(); }
-            refs.renderer?.dispose();
+
+            refs.stars.forEach((s) => {
+                s.geometry.dispose();
+                s.material.dispose();
+            });
+            refs.mountains.forEach((m) => {
+                m.geometry.dispose();
+                m.material.dispose();
+            });
+            if (refs.nebula) {
+                refs.nebula.geometry.dispose();
+                refs.nebula.material.dispose();
+            }
+            if (refs.renderer) {
+                refs.renderer.dispose();
+            }
         };
     }, []);
 
