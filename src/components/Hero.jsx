@@ -1,115 +1,144 @@
-import { useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { FaDownload, FaEye } from 'react-icons/fa';
+import { useEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
 import { socialLinks } from '../data/portfolioData';
 
-const LOOP_SKIP_SECONDS = 4;
+export default function Hero() {
+    const titleRef = useRef(null);
+    const subtitleRef = useRef(null);
+    const scrollRef = useRef(null);
+    const sideMenuRef = useRef(null);
+    const [scrollProgress, setScrollProgress] = useState(0);
 
-function VideoBackground() {
-    const videoRef = useRef(null);
-    const hasPlayedOnce = useRef(false);
+    // GSAP entrance animations (matching 21st.dev Horizon)
+    useEffect(() => {
+        const tl = gsap.timeline({ delay: 0.3 });
 
-    const handleEnded = useCallback(() => {
-        const video = videoRef.current;
-        if (!video) return;
-        hasPlayedOnce.current = true;
-        video.currentTime = LOOP_SKIP_SECONDS;
-        video.play();
+        // Set initially hidden
+        gsap.set([sideMenuRef.current, titleRef.current, subtitleRef.current, scrollRef.current], {
+            visibility: 'visible',
+        });
+
+        // Side menu slides in
+        if (sideMenuRef.current) {
+            tl.from(sideMenuRef.current, {
+                x: -100,
+                opacity: 0,
+                duration: 1,
+                ease: 'power3.out',
+            });
+        }
+
+        // Title characters fly up
+        if (titleRef.current) {
+            const chars = titleRef.current.querySelectorAll('.title-char');
+            tl.from(chars, {
+                y: 200,
+                opacity: 0,
+                duration: 1.5,
+                stagger: 0.05,
+                ease: 'power4.out',
+            }, '-=0.5');
+        }
+
+        // Subtitle lines
+        if (subtitleRef.current) {
+            const lines = subtitleRef.current.querySelectorAll('.subtitle-line');
+            tl.from(lines, {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power3.out',
+            }, '-=0.8');
+        }
+
+        // Scroll indicator
+        if (scrollRef.current) {
+            tl.from(scrollRef.current, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                ease: 'power2.out',
+            }, '-=0.5');
+        }
+
+        return () => tl.kill();
     }, []);
 
-    return (
-        <div className="video-bg">
-            <video
-                ref={videoRef}
-                autoPlay
-                muted
-                playsInline
-                preload="auto"
-                onEnded={handleEnded}
-            >
-                <source src="/videos/huly_laser_remix.mp4" type="video/mp4" />
-            </video>
-        </div>
-    );
-}
+    // Scroll progress tracking
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            setScrollProgress(docHeight > 0 ? Math.min(scrollY / docHeight, 1) : 0);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-const containerVariants = {
-    hidden: {},
-    show: {
-        transition: { staggerChildren: 0.15, delayChildren: 0.3 },
-    },
-};
+    const splitText = (text) =>
+        text.split('').map((char, i) => (
+            <span key={i} className="title-char">
+                {char === ' ' ? '\u00A0' : char}
+            </span>
+        ));
 
-const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-};
-
-export default function Hero() {
     return (
         <section id="home" className="hero">
-            {/* Video Background */}
-            <VideoBackground />
-
-            <motion.div
-                className="hero-content"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-            >
-                <motion.p className="hero-greeting" variants={itemVariants}>
-                    👋 Hello, I'm
-                </motion.p>
-
-                <motion.h1 className="hero-title" variants={itemVariants}>
-                    <span className="name">Niranjan</span>
-                    <span className="gradient-text">Data Scientist in the Making</span>
-                </motion.h1>
-
-                <motion.p className="hero-subtitle" variants={itemVariants}>
-                    I create intelligent solutions and insights that help businesses
-                    make data-driven decisions.
-                </motion.p>
-
-                <motion.div className="hero-buttons" variants={itemVariants}>
-                    <a href="/docs/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                        <FaEye /> View Resume
-                    </a>
-                    <a href="/docs/resume.pdf" download className="btn btn-secondary">
-                        <FaDownload /> Download Resume
-                    </a>
-                </motion.div>
-
-                <motion.div className="hero-socials" variants={itemVariants}>
-                    <span className="social-label">Follow Me</span>
-                    {socialLinks.slice(0, 3).map((s, i) => (
-                        <motion.a
-                            key={i}
-                            href={s.href}
-                            className="social-icon"
-                            aria-label={s.label}
-                            whileHover={{ scale: 1.2, y: -4 }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <s.icon />
-                        </motion.a>
-                    ))}
-                </motion.div>
-            </motion.div>
-
-            {/* Scroll indicator */}
-            <motion.div
-                className="scroll-indicator"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2, duration: 1 }}
-                onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-                <span>Scroll</span>
-                <div className="scroll-mouse">
-                    <div className="scroll-dot" />
+            {/* Side menu */}
+            <div ref={sideMenuRef} className="hero-side-menu" style={{ visibility: 'hidden' }}>
+                <div className="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-            </motion.div>
+                <div className="hero-vertical-text">SPACE</div>
+            </div>
+
+            {/* Main content — no glass card, raw text on scene */}
+            <div className="hero-content">
+                <h1 ref={titleRef} className="hero-title" style={{ visibility: 'hidden' }}>
+                    {splitText('NIRANJAN')}
+                </h1>
+
+                <div ref={subtitleRef} className="hero-subtitle-wrap" style={{ visibility: 'hidden' }}>
+                    <p className="hero-subtitle subtitle-line">
+                        Data Scientist in the Making
+                    </p>
+                    <p className="hero-subtitle subtitle-line">
+                        Creating intelligent solutions &amp; insights
+                    </p>
+                </div>
+            </div>
+
+            {/* Scroll progress indicator */}
+            <div ref={scrollRef} className="hero-scroll-indicator" style={{ visibility: 'hidden' }}>
+                <span className="scroll-label">SCROLL</span>
+                <div className="scroll-track">
+                    <div
+                        className="scroll-fill"
+                        style={{ width: `${scrollProgress * 100}%` }}
+                    />
+                </div>
+                <span className="scroll-counter">
+                    {String(Math.min(Math.floor(scrollProgress * 6), 5)).padStart(2, '0')} / 05
+                </span>
+            </div>
+
+            {/* Social links at bottom */}
+            <div className="hero-socials">
+                <span className="social-label">Follow Me</span>
+                {socialLinks.slice(0, 3).map((s, i) => (
+                    <a
+                        key={i}
+                        href={s.href}
+                        className="social-icon"
+                        aria-label={s.label}
+                    >
+                        <s.icon />
+                    </a>
+                ))}
+            </div>
         </section>
     );
 }
