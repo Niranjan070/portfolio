@@ -339,6 +339,7 @@ button {
   overflow: hidden;
   z-index: 1;
   background: transparent;
+  padding-top: 120px;
 }
 
 /* Three.js Space Background (fixed fullscreen) */
@@ -511,54 +512,113 @@ button {
   font-weight: 500;
 }
 
-/* Hero Buttons */
+/* ===== LIQUID GLASS BUTTONS ===== */
 .hero-buttons {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: var(--spacing-2xl);
   margin-bottom: var(--spacing-2xl);
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.btn {
+/* Base glass button */
+.glass-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: 14px 32px;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 18px 36px;
+  border-radius: 24px;
   border: none;
-  border-radius: var(--radius-full);
+  box-shadow:
+    0 6px 6px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.glass-btn:hover {
+  padding: 20px 42px;
+  border-radius: 28px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(0, 212, 255, 0.12);
+}
+
+/* Shared layer styling */
+.glass-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Layer 1 — distortion backdrop */
+.glass-blur {
+  z-index: 0;
+  overflow: hidden;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  filter: url(#glass-distortion);
+  isolation: isolate;
+}
+
+/* Layer 2 — frosted white tint */
+.glass-tint {
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Layer 3 — rim / inset shadow (glass edge highlight) */
+.glass-rim {
+  z-index: 20;
+  overflow: hidden;
+  box-shadow:
+    inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5),
+    inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Content (text + icon) */
+.glass-btn-content {
+  position: relative;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: var(--font-size-sm);
   font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  font-family: inherit;
-  position: relative;
-  overflow: hidden;
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  white-space: nowrap;
 }
 
-.btn-primary {
-  background: var(--gradient-accent);
-  color: var(--bg-primary);
-  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+.glass-btn:hover .glass-btn-content {
+  transform: scale(0.96);
 }
 
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+/* Subtle accent glow on hover */
+.glass-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  background: linear-gradient(135deg,
+      rgba(0, 212, 255, 0.12),
+      rgba(217, 70, 239, 0.08));
+  transition: opacity 0.5s ease;
+  z-index: 5;
+  pointer-events: none;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(10px);
-}
-
-.btn-secondary:hover {
-  border-color: var(--accent-cyan);
-  background: rgba(0, 212, 255, 0.05);
-  transform: translateY(-3px);
+.glass-btn:hover::after {
+  opacity: 1;
 }
 
 /* Hero Socials */
@@ -664,54 +724,74 @@ button {
   justify-content: center;
 }
 
-.about-image-container {
-  position: relative;
+/* 3D Frosted Photo Card */
+.frosted-card {
+  perspective: 1000px;
   width: 340px;
   height: 340px;
   border-radius: var(--radius-xl);
-  overflow: hidden;
+  cursor: pointer;
 }
 
-.about-image-container::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  background: var(--gradient-primary);
+.frosted-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: var(--radius-xl);
-  z-index: -1;
-  opacity: 0.6;
-  transition: opacity var(--transition-base);
+  overflow: hidden;
+  transition: transform 0.15s ease-out;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.about-image-container:hover::before {
-  opacity: 1;
-}
-
-.about-image-container img {
+.frosted-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: var(--radius-xl);
-  transition: transform var(--transition-slow);
+  transition: transform 0.5s var(--ease-out);
 }
 
-.about-image-container:hover img {
-  transform: scale(1.05);
+.frosted-card:hover .frosted-card-img {
+  transform: scale(1.08);
+}
+
+/* Gradient overlay for depth */
+.frosted-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.1) 40%,
+      transparent 100%);
+  border-radius: var(--radius-xl);
+  pointer-events: none;
+}
+
+/* Frosted glass shine layer */
+.frosted-card-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  pointer-events: none;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      transparent 60%);
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.35),
+    inset -1px -1px 1px rgba(255, 255, 255, 0.1);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.frosted-card:hover .frosted-card-shine {
+  opacity: 1;
 }
 
 .about-float-badge {
   position: absolute;
-  background: var(--bg-glass);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-md) var(--spacing-lg);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-weight: 600;
-  font-size: var(--font-size-sm);
-  box-shadow: var(--shadow-md);
 }
 
 .about-float-badge.top {
@@ -724,8 +804,49 @@ button {
   left: -20px;
 }
 
-.about-float-badge .badge-icon {
-  font-size: var(--font-size-2xl);
+/* Liquid Glass Badge */
+.glass-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 14px 22px;
+  border-radius: 20px;
+  box-shadow:
+    0 6px 6px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.glass-badge:hover {
+  padding: 16px 26px;
+  border-radius: 24px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(0, 212, 255, 0.1);
+}
+
+.glass-badge-content {
+  position: relative;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.glass-badge:hover .glass-badge-content {
+  transform: scale(0.96);
+}
+
+.glass-badge .badge-icon {
+  font-size: var(--font-size-xl);
 }
 
 /* ===== SKILLS ===== */

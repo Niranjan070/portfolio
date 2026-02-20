@@ -1,6 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { stats } from '../data/portfolioData';
+
+/* ── Pool of badge titles (randomly picked on each load) ── */
+const BADGE_POOL = [
+    { emoji: '🎓', text: 'Data Science' },
+    { emoji: '🚀', text: 'ML Enthusiast' },
+    { emoji: '📊', text: 'Data Analysis' },
+    { emoji: '🤖', text: 'AI Engineer' },
+    { emoji: '🧠', text: 'Deep Learning' },
+    { emoji: '📈', text: 'Data Visualization' },
+    { emoji: '💡', text: 'Problem Solver' },
+    { emoji: '⚡', text: 'Python Developer' },
+    { emoji: '🔬', text: 'NLP Explorer' },
+    { emoji: '🛠️', text: 'Model Builder' },
+];
+
+function pickRandomPair() {
+    const shuffled = [...BADGE_POOL].sort(() => Math.random() - 0.5);
+    return [shuffled[0], shuffled[1]];
+}
 
 function AnimatedCounter({ target, suffix }) {
     const [count, setCount] = useState(0);
@@ -9,14 +28,12 @@ function AnimatedCounter({ target, suffix }) {
 
     useEffect(() => {
         if (!isInView) return;
-        let start = 0;
         const duration = 1500;
         const startTime = performance.now();
 
         const animate = (now) => {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            // easeOutExpo
             const eased = 1 - Math.pow(2, -10 * progress);
             const current = Math.round(eased * target);
             setCount(current);
@@ -29,6 +46,59 @@ function AnimatedCounter({ target, suffix }) {
     return <span ref={ref}>{count}{suffix}</span>;
 }
 
+/* ── Liquid Glass Badge ── */
+function GlassBadge({ emoji, text }) {
+    return (
+        <div className="glass-badge">
+            <span className="glass-layer glass-blur" />
+            <span className="glass-layer glass-tint" />
+            <span className="glass-layer glass-rim" />
+            <span className="glass-badge-content">
+                <span className="badge-icon">{emoji}</span>
+                <span>{text}</span>
+            </span>
+        </div>
+    );
+}
+
+/* ── 3D Frosted Photo Card ── */
+function FrostedPhoto({ src, alt }) {
+    const [rotate, setRotate] = useState({ x: 0, y: 0 });
+
+    const handleMouseMove = useCallback((e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const { width, height } = rect;
+        const rotateY = (x / width - 0.5) * 30;
+        const rotateX = -(y / height - 0.5) * 30;
+        setRotate({ x: rotateX, y: rotateY });
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+        setRotate({ x: 0, y: 0 });
+    }, []);
+
+    return (
+        <div
+            className="frosted-card"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+        >
+            <div
+                className="frosted-card-inner"
+                style={{
+                    transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale(1.02)`,
+                }}
+            >
+                <img src={src} alt={alt} className="frosted-card-img" />
+                <div className="frosted-card-overlay" />
+                <div className="frosted-card-shine" />
+            </div>
+        </div>
+    );
+}
+
 const fadeUp = {
     hidden: { opacity: 0, y: 40 },
     show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
@@ -37,6 +107,9 @@ const fadeUp = {
 export default function About() {
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+
+    // Pick two random badges on mount
+    const [badgeTop, badgeBottom] = useMemo(() => pickRandomPair(), []);
 
     return (
         <section id="about" className="section section-alt" ref={sectionRef}>
@@ -94,33 +167,7 @@ export default function About() {
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                     >
-                        <motion.div
-                            className="about-image-container"
-                            whileHover={{ scale: 1.03 }}
-                            transition={{ type: 'spring', stiffness: 300 }}
-                        >
-                            <img src="\images\profile 2.jpeg" alt="Niranjan" />
-                        </motion.div>
-
-                        <motion.div
-                            className="about-float-badge top"
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={isInView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ delay: 0.8, duration: 0.6 }}
-                        >
-                            <span className="badge-icon">🎓</span>
-                            <span>Data Science</span>
-                        </motion.div>
-
-                        <motion.div
-                            className="about-float-badge bottom"
-                            initial={{ opacity: 0, x: -30 }}
-                            animate={isInView ? { opacity: 1, x: 0 } : {}}
-                            transition={{ delay: 1, duration: 0.6 }}
-                        >
-                            <span className="badge-icon">🚀</span>
-                            <span>ML Enthusiast</span>
-                        </motion.div>
+                        <FrostedPhoto src="\images\profile 2.jpeg" alt="Niranjan" />
                     </motion.div>
                 </div>
             </div>
