@@ -135,14 +135,17 @@ export default function About() {
                         animate={isInView ? 'show' : 'hidden'}
                     >
                         <motion.p variants={fadeUp}>
-                            I'm a passionate data science enthusiast with a strong foundation in
-                            mathematics, statistics, and programming. Currently pursuing advanced
-                            skills in machine learning, deep learning, and data visualization.
+                            I'm an AI & Data Science undergraduate at Karunya Institute of Technology
+                            and Sciences, specializing in production-ready machine learning solutions
+                            across NLP and Computer Vision. I build end-to-end data pipelines, train
+                            and evaluate models, and deploy ML systems via Flask and Streamlit.
                         </motion.p>
                         <motion.p variants={fadeUp}>
-                            My journey involves transforming complex data into actionable insights
-                            and building predictive models that solve real-world problems. I believe
-                            in the power of data to drive innovation and create meaningful impact.
+                            As a Data Science Intern at Edify Techno Solutions, I delivered ML
+                            pipelines, prototyped deep learning models in TensorFlow, and built
+                            interactive Power BI dashboards that translate model outputs into
+                            business insights. I focus on converting real-world data into scalable,
+                            business-aligned AI products.
                         </motion.p>
 
                         <motion.div className="stats-grid" variants={fadeUp}>
