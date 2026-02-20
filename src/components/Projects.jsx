@@ -70,11 +70,21 @@ function ProjectModal({ project, onClose }) {
                         </div>
 
                         <div className="modal-actions">
-                            <a href={project.github} className="btn btn-primary" target="_blank" rel="noopener noreferrer">
-                                <FaGithub /> View Code
+                            <a href={project.github} className="glass-btn" target="_blank" rel="noopener noreferrer">
+                                <span className="glass-layer glass-blur" />
+                                <span className="glass-layer glass-tint" />
+                                <span className="glass-layer glass-rim" />
+                                <span className="glass-btn-content">
+                                    <FaGithub /> View Code
+                                </span>
                             </a>
-                            <a href={project.live} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">
-                                <FaExternalLinkAlt /> Live Demo
+                            <a href={project.live} className="glass-btn" target="_blank" rel="noopener noreferrer">
+                                <span className="glass-layer glass-blur" />
+                                <span className="glass-layer glass-tint" />
+                                <span className="glass-layer glass-rim" />
+                                <span className="glass-btn-content">
+                                    <FaExternalLinkAlt /> Live Demo
+                                </span>
                             </a>
                         </div>
                     </div>
