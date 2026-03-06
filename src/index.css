@@ -240,24 +240,34 @@ button {
 .logo {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0;
   font-size: var(--font-size-xl);
   font-weight: 700;
-  letter-spacing: 1px;
   z-index: 1001;
+  text-decoration: none;
+  color: inherit;
 }
 
-.logo-icon {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--gradient-primary);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-xl);
-  font-weight: 900;
-  color: var(--bg-primary);
+.logo-mark {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -1px;
+}
+
+.logo-dot {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  margin: 0 1px;
+}
+
+.logo-name {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  margin-left: 2px;
 }
 
 .nav-menu {

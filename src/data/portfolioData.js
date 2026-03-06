@@ -15,10 +15,10 @@ export const socialLinks = [
 export const navLinks = [
     { label: 'Home', href: '#home' },
     { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Certificates', href: '#certificates' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Stack', href: '#skills' },
+    { label: 'Work', href: '#projects' },
+    { label: 'Certs', href: '#certificates' },
+    { label: 'Say Hi', href: '#contact' },
 ];
 
 export const stats = [

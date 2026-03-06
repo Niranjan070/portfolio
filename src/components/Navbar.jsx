@@ -49,14 +49,17 @@ export default function Navbar() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
             <div className="nav-container">
-                <motion.div
+                <motion.a
+                    href="#home"
                     className="logo"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onClick={(e) => handleNavClick(e, '#home')}
                 >
-                    <div className="logo-icon">N</div>
-                    <span>NIRANJAN</span>
-                </motion.div>
+                    <span className="logo-mark">N</span>
+                    <span className="logo-dot">.</span>
+                    <span className="logo-name">niranjan</span>
+                </motion.a>
 
                 <div className={`nav-menu ${menuOpen ? 'open' : ''}`}>
                     {navLinks.map((link, i) => (

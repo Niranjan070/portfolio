@@ -13,13 +13,14 @@ export default function Footer() {
                 <div className="footer-content">
                     <div className="footer-left">
                         <div className="logo">
-                            <div className="logo-icon">N</div>
-                            <span>NIRANJAN</span>
+                            <span className="logo-mark">N</span>
+                            <span className="logo-dot">.</span>
+                            <span className="logo-name">niranjan</span>
                         </div>
-                        <p>&copy; {new Date().getFullYear()} Niranjan. All rights reserved.</p>
+                        <p>&copy; {new Date().getFullYear()} Niranjan</p>
                     </div>
                     <div className="footer-right">
-                        <p>Built with passion for data science ❤️</p>
+                        <p>designed & built by me ☕</p>
                     </div>
                 </div>
             </div>
