@@ -55,7 +55,7 @@ export const skills = [
         category: 'ml',
         title: 'Machine Learning',
         icon: FaBrain,
-        pills: ['scikit-learn', 'Classification', 'Regression', 'Cross-Validation', 'Error Analysis'],
+        pills: ['scikit-learn', 'ML Fundamentals', 'Model Evaluation'],
     },
     {
         id: 4,
