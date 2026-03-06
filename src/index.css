@@ -960,14 +960,42 @@ button {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  transition: all var(--transition-base);
+  transition: all 0.4s var(--ease-out);
   cursor: pointer;
+  position: relative;
+}
+
+/* Shine sweep overlay */
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease-out);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.project-card:hover::after {
+  transform: translateX(120%);
 }
 
 .project-card:hover {
-  border-color: var(--border-hover);
-  transform: translateY(-8px);
-  box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15);
+  border-color: var(--accent-cyan);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 20px 60px rgba(0, 212, 255, 0.2),
+    0 0 40px rgba(217, 70, 239, 0.08);
 }
 
 .project-image {
