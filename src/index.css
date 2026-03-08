@@ -574,8 +574,7 @@ button {
 }
 
 .glass-btn:hover {
-  padding: 20px 42px;
-  border-radius: 28px;
+  transform: scale(1.05);
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.3),
     0 0 40px rgba(0, 212, 255, 0.12);
@@ -1811,8 +1810,7 @@ button {
   }
 
   .glass-btn:hover {
-    padding: 15px 26px;
-    border-radius: 20px;
+    transform: scale(1.03);
   }
 
   .glass-btn-content {
@@ -1937,8 +1935,7 @@ button {
   }
 
   .glass-btn:hover {
-    padding: 14px 20px;
-    border-radius: 16px;
+    transform: scale(1.02);
   }
 
   .stats-grid {
