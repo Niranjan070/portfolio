@@ -219,7 +219,7 @@ button {
   margin: 0 auto;
   max-width: 1200px;
   z-index: 1000;
-  padding: 10px 28px;
+  padding: 14px 28px 10px;
   border-radius: 20px;
   transition: all 0.5s var(--ease-out);
   display: flex;
@@ -324,26 +324,9 @@ button {
   padding: 6px 0;
 }
 
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--gradient-accent);
-  transition: width var(--transition-base);
-  border-radius: var(--radius-full);
-}
-
 .nav-link:hover,
 .nav-link.active {
   color: var(--text-primary);
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-  width: 100%;
 }
 
 .hamburger {
