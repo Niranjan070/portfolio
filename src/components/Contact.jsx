@@ -162,16 +162,14 @@ export default function Contact() {
 
                             <motion.button
                                 type="submit"
-                                className="glass-btn"
+                                className="contact-submit-glass"
                                 disabled={formStatus === 'sending'}
                                 whileHover={{ scale: 1.03 }}
                                 whileTap={{ scale: 0.97 }}
-                                style={{ width: '100%', justifyContent: 'center' }}
                             >
-                                <span className="glass-layer glass-blur" />
-                                <span className="glass-layer glass-tint" />
-                                <span className="glass-layer glass-rim" />
-                                <span className="glass-btn-content">
+                                <span className="contact-glass-tint" />
+                                <span className="contact-glass-rim" />
+                                <span className="contact-glass-content">
                                     {formStatus === 'sending' ? (
                                         <>Sending...</>
                                     ) : (
