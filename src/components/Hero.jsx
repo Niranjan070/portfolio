@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import { FaEye, FaDownload } from 'react-icons/fa';
 import { socialLinks } from '../data/portfolioData';
 
-const RESUME_PATH = '/docs/resume 1.2.pdf';
+const RESUME_PATH = '/docs/Niranjan_T_Resume.pdf';
 
 /* ── Liquid glass button ── */
 function GlassButton({ href, download, target, rel, id, icon: Icon, children }) {
@@ -116,7 +116,7 @@ export default function Hero() {
 
 
             {/* Side menu — starts hidden */}
-            <div className="hero-side-menu">
+            <div ref={sideMenuRef} className="hero-side-menu">
                 <div className="menu-icon">
                     <span></span>
                     <span></span>
@@ -137,10 +137,10 @@ export default function Hero() {
 
                 <div ref={subtitleRef} className="hero-subtitle-wrap">
                     <p className="hero-subtitle subtitle-line">
-                        Data Scientist in the Making
+                        AI Engineer &amp; Agentic Systems Builder
                     </p>
                     <p className="hero-subtitle subtitle-line">
-                        Creating intelligent solutions &amp; insights
+                        Engineering Autonomous Multi-Agent Systems &amp; Production AI
                     </p>
                 </div>
 
@@ -158,7 +158,7 @@ export default function Hero() {
 
                     <GlassButton
                         href={RESUME_PATH}
-                        download="Niranjan_Resume.pdf"
+                        download="Niranjan_T_Resume.pdf"
                         id="download-resume-btn"
                         icon={FaDownload}
                     >

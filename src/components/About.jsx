@@ -1,25 +1,6 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { stats } from '../data/portfolioData';
-
-/* ── Pool of badge titles (randomly picked on each load) ── */
-const BADGE_POOL = [
-    { emoji: '🎓', text: 'Data Science' },
-    { emoji: '🚀', text: 'ML Enthusiast' },
-    { emoji: '📊', text: 'Data Analysis' },
-    { emoji: '🤖', text: 'AI Engineer' },
-    { emoji: '🧠', text: 'Deep Learning' },
-    { emoji: '📈', text: 'Data Visualization' },
-    { emoji: '💡', text: 'Problem Solver' },
-    { emoji: '⚡', text: 'Python Developer' },
-    { emoji: '🔬', text: 'NLP Explorer' },
-    { emoji: '🛠️', text: 'Model Builder' },
-];
-
-function pickRandomPair() {
-    const shuffled = [...BADGE_POOL].sort(() => Math.random() - 0.5);
-    return [shuffled[0], shuffled[1]];
-}
 
 function AnimatedCounter({ target, suffix }) {
     const [count, setCount] = useState(0);
@@ -44,21 +25,6 @@ function AnimatedCounter({ target, suffix }) {
     }, [isInView, target]);
 
     return <span ref={ref}>{count}{suffix}</span>;
-}
-
-/* ── Liquid Glass Badge ── */
-function GlassBadge({ emoji, text }) {
-    return (
-        <div className="glass-badge">
-            <span className="glass-layer glass-blur" />
-            <span className="glass-layer glass-tint" />
-            <span className="glass-layer glass-rim" />
-            <span className="glass-badge-content">
-                <span className="badge-icon">{emoji}</span>
-                <span>{text}</span>
-            </span>
-        </div>
-    );
 }
 
 /* ── 3D Frosted Photo Card ── */
@@ -108,9 +74,6 @@ export default function About() {
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
-    // Pick two random badges on mount
-    const [badgeTop, badgeBottom] = useMemo(() => pickRandomPair(), []);
-
     return (
         <section id="about" className="section section-alt" ref={sectionRef}>
             <div className="container">
@@ -135,17 +98,15 @@ export default function About() {
                         animate={isInView ? 'show' : 'hidden'}
                     >
                         <motion.p variants={fadeUp}>
-                            I'm an AI & Data Science undergraduate at Karunya Institute of Technology
-                            and Sciences, specializing in production-ready machine learning solutions
-                            across NLP and Computer Vision. I build end-to-end data pipelines, train
-                            and evaluate models, and deploy ML systems via Flask and Streamlit.
+                            I'm an AI &amp; Data Science undergraduate at Karunya Institute of Technology
+                            and Sciences, engineering production-grade AI systems, multi-agent architectures,
+                            and deep learning pipelines across NLP, Computer Vision, and autonomous agent workflows.
                         </motion.p>
                         <motion.p variants={fadeUp}>
-                            As a Data Science Intern at Edify Techno Solutions, I delivered ML
-                            pipelines, prototyped deep learning models in TensorFlow, and built
-                            interactive Power BI dashboards that translate model outputs into
-                            business insights. I focus on converting real-world data into scalable,
-                            business-aligned AI products.
+                            From building local 4-bit quantized multi-agent platforms (AIRA) and token-efficient
+                            EDA agents (Intel Unnati Challenge 2) to edge YOLO microscopic spore diagnostics (SporeNet)
+                            and delivering production data pipelines as a Data Science Intern at Edify Techno Solutions,
+                            I focus on engineering AI that drives decisions and operates reliably in production.
                         </motion.p>
 
                         <motion.div className="stats-grid" variants={fadeUp}>
@@ -170,7 +131,7 @@ export default function About() {
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                     >
-                        <FrostedPhoto src="\images\profile 2.jpeg" alt="Niranjan" />
+                        <FrostedPhoto src="/images/profile 2.jpeg" alt="Niranjan" />
                     </motion.div>
                 </div>
             </div>

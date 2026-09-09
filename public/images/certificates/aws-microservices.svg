@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="100%" height="100%">
+  <defs>
+    <linearGradient id="awsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141d26"/>
+      <stop offset="50%" stop-color="#1b2836"/>
+      <stop offset="100%" stop-color="#0f161e"/>
+    </linearGradient>
+    <linearGradient id="awsBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff9900" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ffad33" stop-opacity="0.3"/>
+    </linearGradient>
+    <filter id="awsGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Card Background -->
+  <rect width="400" height="250" rx="16" fill="url(#awsBg)" stroke="url(#awsBorder)" stroke-width="2"/>
+
+  <!-- Decorative Orange Glow Circle -->
+  <circle cx="340" cy="60" r="80" fill="#ff9900" opacity="0.1" filter="url(#awsGlow)"/>
+
+  <!-- AWS Badge Box -->
+  <g transform="translate(30, 30)">
+    <rect x="0" y="0" width="56" height="32" rx="6" fill="#232f3e" stroke="#ff9900" stroke-width="1"/>
+    <text x="28" y="21" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="900" fill="#ff9900" text-anchor="middle" letter-spacing="1">aws</text>
+    <text x="68" y="22" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700" fill="#ffffff">Amazon Web Services</text>
+  </g>
+
+  <!-- Badge Tag -->
+  <g transform="translate(30, 80)">
+    <rect x="0" y="0" width="165" height="24" rx="12" fill="rgba(255, 153, 0, 0.15)" stroke="#ff9900" stroke-width="1"/>
+    <text x="82" y="16" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="600" fill="#ffaa22" text-anchor="middle" letter-spacing="0.5">AWS ACADEMY GRADUATE</text>
+  </g>
+
+  <!-- Certificate Title -->
+  <text x="30" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="700" fill="#ffffff">Microservices &amp; CI/CD Pipelines</text>
+  <text x="30" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500" fill="#a4b4c4">Pipeline Builder • Cloud Architecture • DevOps</text>
+
+  <!-- Verification Badge & Date -->
+  <g transform="translate(30, 195)">
+    <circle cx="10" cy="10" r="10" fill="#ff9900" opacity="0.2"/>
+    <circle cx="10" cy="10" r="7" fill="#ff9900"/>
+    <path d="M7 10 L9 12 L13 8" stroke="#141d26" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="28" y="14" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#ffb84d">Verified Training Badge</text>
+  </g>
+
+  <text x="370" y="209" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500" fill="#7a8d9f" text-anchor="end">Apr 2026</text>
+</svg>
