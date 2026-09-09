@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="50%" stop-color="#4facfe"/>
+      <stop offset="100%" stop-color="#7928ca"/>
+    </linearGradient>
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Dark container background with sleek gradient border -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#0a0d17" stroke="url(#borderGrad)" stroke-width="2.5"/>
+
+  <!-- Stylized Geometric N -->
+  <polygon points="13,47 18.5,47 18.5,27.5 29,47 34,47 34,17 28.5,17 28.5,36.5 18,17 13,17" fill="#ffffff"/>
+
+  <!-- Stylized Geometric T in AI Gradient -->
+  <polygon points="35.5,17 52,17 52,22.5 46.5,22.5 46.5,47 41,47 41,22.5 35.5,22.5" fill="url(#aiGrad)"/>
+
+  <!-- AI Accent Pulse Dot -->
+  <circle cx="50" cy="14" r="3" fill="#00f2fe" filter="url(#glow)"/>
+</svg>
