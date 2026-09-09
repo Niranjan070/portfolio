@@ -1,16 +1,88 @@
-# React + Vite
+# Niranjan T | AI Engineer & Agentic Systems Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Portfolio](https://img.shields.io/badge/Portfolio-Live_Site-blue?style=for-the-badge&logo=react)](https://niranjan070.github.io/portfolio/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-niranjan--t---0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/niranjan-t-/)
+[![GitHub](https://img.shields.io/badge/GitHub-Niranjan070-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Niranjan070)
+[![Email](https://img.shields.io/badge/Email-nirthangam6474%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nirthangam6474@gmail.com)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 👨‍💻 About Me
 
-## React Compiler
+I am an **AI Engineer & Pre-final year undergraduate** at **Karunya Institute of Technology and Sciences (KITS)** with hands-on experience building production-grade autonomous agent systems, quantized local LLM architectures, and computer vision pipelines.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🧠 **Focus**: Agentic AI, Multi-Agent Orchestration, Local LLM Quantization, Computer Vision, & Applied Deep Learning.
+- 🛠️ **Hands-on Experience**: Multi-agent platforms with stateful graphs, token-optimized data analysis agents, and edge-deployable vision models.
+- 🎯 **Looking For**: AI Engineer, Machine Learning Engineer, and GenAI roles.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Technical Skills
+
+| Domain | Technologies & Tools |
+| :--- | :--- |
+| **Agentic AI & LLMs** | LangGraph, LangChain, Ollama, LlamaIndex, LiteLLM, vLLM, HuggingFace, Prompt Engineering |
+| **Machine Learning & DL** | PyTorch, TensorFlow, Scikit-learn, XGBoost, Pandas, NumPy |
+| **Computer Vision** | YOLOv8 / YOLOv11, OpenCV, Albumentations, Multimodal Vision Models |
+| **Databases & Vector DBs** | ChromaDB, FAISS, PostgreSQL, MySQL, SQLite |
+| **Backend & Web** | FastAPI, Flask, Streamlit, React.js, Vite, Node.js |
+| **DevOps & Cloud** | Docker, Git / GitHub, Microsoft Azure AI, AWS Academy, Linux |
+
+---
+
+## 🚀 Featured Projects
+
+### 1. [AIRA – Multi-Agent AI Risk & Compliance Platform](https://github.com/Niranjan070/AIRA)
+- Enterprise multi-agent business intelligence ecosystem running on local 4-bit quantized models (`Qwen2.5` / `SmolLM2`).
+- 4 sequential specialist agents (Finance, Risk, Compliance, Market) grounded in Indian financial data (RBI / SEBI).
+
+### 2. [ScaleDown Data Analysis Agent](https://github.com/Niranjan070/ScaleDown-Data-Analysis-Agent)
+- High-efficiency agent built for the **Intel Unnati Challenge 2**, achieving **85–90% LLM token compression**.
+- Processes enterprise CSV/Excel datasets with automated anomaly detection, chart generation, and executive PDF reporting.
+
+### 3. [SporeNet – Dual-Engine Spore Detection & Gemini Diagnosis](https://github.com/Niranjan070/SporeNet)
+- Microscopic fungal spore detection marrying an **Ultralytics YOLO** detector with **Gemini Multimodal LLM** for crop pathology.
+- Real-time bounding box annotations with actionable fungicide recommendations.
+
+### 4. [S.Y.R.A – Self-Extending Recursive Agent](https://github.com/Niranjan070/S.Y.R.A)
+- Autonomous CLI assistant that writes, tests, and self-integrates Python tools on-the-fly using local Ollama models.
+
+### 5. [LangGraph Resilient Multi-LLM Agent](https://github.com/Niranjan070/langgraph-resilient-multi-llm-agent)
+- Production-grade LangGraph workflow with dual-engine fallback routing (`Claude 3.5 Sonnet` ↔ `Gemini 1.5 Pro`) and Pydantic self-healing validation.
+
+---
+
+## 📜 Certifications
+
+- 🏆 **Microsoft Certified**: Azure AI Fundamentals (AI-900)
+- ☁️ **AWS Academy Graduate**: Microservices & CI/CD Pipelines
+- 🤖 **DeepLearning.AI**: ChatGPT Prompt Engineering for Developers
+- 🎓 **Infosys Springboard**: Artificial Intelligence Primer & Machine Learning Specialization
+
+---
+
+## 💻 Running this Portfolio Locally
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Niranjan070/portfolio.git
+
+# 2. Navigate to directory
+cd portfolio
+
+# 3. Install dependencies
+npm install
+
+# 4. Start Vite development server
+npm run dev
+```
+
+Visit `http://localhost:5173` to view the portfolio in your browser.
+
+---
+
+## 📬 Contact & Connect
+
+- **Email**: [nirthangam6474@gmail.com](mailto:nirthangam6474@gmail.com)
+- **LinkedIn**: [linkedin.com/in/niranjan-t-](https://www.linkedin.com/in/niranjan-t-/)
+- **GitHub**: [github.com/Niranjan070](https://github.com/Niranjan070)
