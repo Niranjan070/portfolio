@@ -3,7 +3,7 @@
 [![Portfolio](https://img.shields.io/badge/Portfolio-Live_Site-blue?style=for-the-badge&logo=react)](https://niranjan070.github.io/portfolio/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-niranjan--t---0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/niranjan-t-/)
 [![GitHub](https://img.shields.io/badge/GitHub-Niranjan070-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Niranjan070)
-[![Email](https://img.shields.io/badge/Email-nirthangam6474%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:nirthangam6474@gmail.com)
+[![Email](https://img.shields.io/badge/Email-niranjan2005official%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:niranjan2005official@gmail.com)
 
 ---
 
@@ -83,6 +83,6 @@ Visit `http://localhost:5173` to view the portfolio in your browser.
 
 ## 📬 Contact & Connect
 
-- **Email**: [nirthangam6474@gmail.com](mailto:nirthangam6474@gmail.com)
+- **Email**: [niranjan2005official@gmail.com](mailto:niranjan2005official@gmail.com)
 - **LinkedIn**: [linkedin.com/in/niranjan-t-](https://www.linkedin.com/in/niranjan-t-/)
 - **GitHub**: [github.com/Niranjan070](https://github.com/Niranjan070)
